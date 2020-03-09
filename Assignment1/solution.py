@@ -5,6 +5,7 @@ from math import gcd
 upper = ascii_uppercase
 lower = ascii_lowercase
 
+
 #Ceaser cipher
 def caesar_encrypt(text, s):
     result = ""
@@ -44,16 +45,15 @@ def caesar_decrypt(text, s):
 
     return result
 
+
 #Affine Cipher
 def affine_encrypt(plain_text, a, b):
     if gcd(a, 26) != 1:
         raise ValueError('a and 26 are not coprime. Please try again.')
 
-    text = plain_text
     out = ''
-    count = 1
 
-    for char in text:
+    for char in plain_text:
 
         if char.isalpha() and char.isupper():
             y = ((a * upper.index(char)) + b) % 26
@@ -66,8 +66,6 @@ def affine_encrypt(plain_text, a, b):
         else:
             out += char
 
-        count += 1
-
     return out.strip()
 
 
@@ -76,7 +74,6 @@ def affine_decrypt(ciphered_text, a, b):
     if gcd(a, 26) != 1:
         raise ValueError('a and 26 are not coprime. Please try again.')
 
-    msg = ciphered_text
     out = ''
     n = 1
     count = 1
@@ -88,7 +85,7 @@ def affine_decrypt(ciphered_text, a, b):
             count += 1
         n += 1
 
-    for char in msg:
+    for char in ciphered_text:
         if char.isalpha() and char.isupper():
             d = int((n * (upper.index(char) - b)) % m)
             out += upper[d]
@@ -102,11 +99,8 @@ def affine_decrypt(ciphered_text, a, b):
 
     return out
 
-
-
 # Vigenere Cipher
 # This function generates the key
-
 def generateKey(string, key):
     count = 0
     for char in string:
@@ -124,8 +118,7 @@ def generateKey(string, key):
     return ("".join(key))
 
 
-
-def cipherText(string, key):
+def vigenere_encrypt(string, key):
     cipher_text = []
 
     j = 0
@@ -157,8 +150,7 @@ def cipherText(string, key):
     return ("".join(cipher_text))
 
 
-
-def originalText(cipher_text, key):
+def vigenere_decrypt(cipher_text, key):
     orig_text = []
     j = 0
     for i in range(len(cipher_text)):
@@ -234,13 +226,13 @@ def main():
                 keyword = sys.argv[5]
                 key = generateKey(text, keyword)
                 file1 = open(outputfile, "w")
-                file1.write(cipherText(text, key))
+                file1.write(vigenere_encrypt(text, key))
                 file1.close()
             elif sys.argv[2] == "decrypt":
                 keyword = sys.argv[5]
                 key = generateKey(text, keyword)
                 file1 = open(outputfile, "w")
-                file1.write(originalText(text, key))
+                file1.write(vigenere_decrypt(text, key))
                 file1.close()
             else:
                 print("Incorrect format of input please refer to the readme file")
